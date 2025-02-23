@@ -36,4 +36,5 @@ Then every time you want to run the application you can use the `go tool` shortc
 go tool dev
 ```
 
-The dev tool reads the Procfile in the root of the folder and start the processes defined in it. Once the application is running it should be [accessible locally](http://localhost:3000).
+The dev tool reads the Procfile in the root of the folder and start the processes defined in it.
+Once the application is running it should be [accessible locally](http://localhost:3000).
