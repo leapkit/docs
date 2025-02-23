@@ -38,4 +38,7 @@ quick_links:
 # Shows on each of the documentation pages
 # $YEAR is replaced with the current year.
 copy: "© $YEAR LeapKit"
+
+# Files to ignore in the site
+ignore: ["README.md", "LICENSE.md"]
 ---
