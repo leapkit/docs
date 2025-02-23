@@ -14,7 +14,7 @@ logo:
 #  text: "Check our Github repository"
 #  link: "https://github.com/leapkit/leapkit/template"
 
-github: "https://github.com/leapkit/leapkit"
+github: "https://github.com/leapkit"
 external_links:
   text: "Documentation"
   link: "/"
@@ -27,8 +27,11 @@ quick_links:
 - text: "Documentation"
   link: "/"
   icon: "menu_book"
-- text: "Repo"
-  link: "https://github.com/leapkit/leapkit"
+- text: "Core"
+  link: "https://github.com/leapkit/core"
+  icon: "developer_guide"
+- text: "Tools"
+  link: "https://github.com/leapkit/tools"
   icon: "developer_guide"
 
 # CTA button shows on the top right of the site.
