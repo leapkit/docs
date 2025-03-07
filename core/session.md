@@ -9,9 +9,15 @@ Leapkit provides a way to set a session in your app to persist values needed thr
 
 To set the session in your app, you have to use the `server.WithSession` server option and pass a session secret key and the session name.
 
+```.env
+# .env
+SESSION_SECRET="abc123"
+SESSION_NAME="leapkit_session"
+```
+
 ```go
 s := server.New(
-   server.WithSession("secret_key", "session_name"),
+   server.WithSession(os.Getenv("SESSION_SECRET"), os.Getenv("SESSION_NAME")),
 )
 ```
 

@@ -3,9 +3,11 @@ title: Environment Variables
 index: 5
 ---
 
-Leapkit provides a handy tool to load environment variables from a `.env` file. This feature is useful when you want to load your environment variables from a file instead of setting them directly in your system, like when you're in `development` mode.
+Leapkit provides a handy way to load environment variables from a `.env` file. This feature is useful when you want to define environment variables in a file instead of setting them directly in your system—especially in `development` mode.
 
-The leapkit template provides a `.env` file with some default values that you can use as a starting point. This is the initial configuration:
+## Default `.env` Configuration
+
+The Leapkit template includes a `.env` file with default values that you can use as a starting point:
 
 ```.env
 DATABASE_URL="leapkit.db"
@@ -15,13 +17,17 @@ SESSION_SECRET="secret"
 SESSION_NAME="leapkit_session"
 ```
 
-Depending on your project, you may choose to add or remove some of these variables. For example, if your application does not use sessions, you can eliminate the `SESSION_SECRET` and `SESSION_NAME` variables.
-Additionally, there is the `HOST` env variable used by Leapkit which default value is `0.0.0.0`, but you can customize it to suit your needs.
+### Understanding Environment Variables
 
-```.env
-HOST="0.0.0.0"
-PORT="8080"
-```
+`GO_ENV`: Specifies the application's environment mode. When set to `development`:
+
+- The `assets` core package recalculates fingerprinted paths for assets whenever they are updated.
+- The `dev` tool listens to the `.go` file (or the extension you specify via command flag) for changes and automatically reloads the application.
+- The built-in `logger` middleware prints error stack traces.
+
+`SESSION_SECRET` and `SESSION_NAME`: These env variables are used by the `session` core package to manage sessions in your app. If your app doesn’t require session management, you can remove these variables. [Read more](/core/session.html).
+
+`HOST` and `PORT`:  These variables define the application's host and port. By default, Leapkit sets them to `0.0.0.0` and `3000`, respectively, but you can customize them as you need.
 
 ### Adding Comments
 
@@ -43,10 +49,12 @@ MIIEpAIBAAKCAQEAqTmwQppL07nBl/0TEQ5sHcqj/Iz9BmuaaEu26jMXYt1QttHn
 
 ## Loading the environment variables
 
-To load the environment variables from the `.env` file into your application, perform an underscore import in your main.go file:
+To load the environment variables from the `.env` file into your application, perform an underscore import in your `main.go` file:
 
 ```go
-// main.go
-import _ "go.leapkit.dev/core/envload"
+import (
+    // Load environment variables
+    _ "go.leapkit.dev/core/tools/envload"
+)
 ```
 
