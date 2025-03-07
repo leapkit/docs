@@ -7,58 +7,52 @@ Leapkit uses Go 1.22 routing as the core of its routing system. This means that 
 
 ```go
 r.HandleFunc("GET /{$}", channels.Default)
-r.Group("/settings/", func(r server.Router) {
-	r.Use(users.OnlyAdmin)
+r.Group("/settings/", func(rg server.Router) {
+	rg.Use(users.OnlyAdmin)
 
-	r.HandleFunc("GET /edit", settings.Edit)
-	r.HandleFunc("GET /join-token/generate", settings.GenerateJoinToken)
-	r.HandleFunc("PUT /update", settings.Update)
+	rg.HandleFunc("GET /edit/{$}", settings.Edit)
+	rg.HandleFunc("GET /join-token/generate/{$}", settings.GenerateJoinToken)
+	rg.HandleFunc("PUT /update/{$}", settings.Update)
 })
 ```
 
 ## LeapKit Server
-The leapkit server is a wrapper around the Go `http.Server` struct. It provides some extra abilities to the server, such as the ability to group routes and middleware.
 
-The `server` paackage is where all these features live. You can create a new server by calling the `server.New` function.
+The leapkit server is a wrapper around the Go `http.Server`. It provides some extra abilities to the server, such as the ability to group routes and middleware.
+
+The `server` package is where all these features live. You can create a new server by calling `server.New`.
 
 ```go
 package main
 
 import (
-	"github.com/leapkit/leapkit/server"
+	"go.leapkit.dev/core/server"
 )
 
 func main() {
-	s := server.New()
+	r := server.New()
 
-	fmt.Println("Server started at", s.Addr())
-	if err := http.ListenAndServe(s.Addr(), s.Handler()); err != nil {
+	// ...
+
+	fmt.Println("Server started at", r.Addr())
+	if err := http.ListenAndServe(r.Addr(), r.Handler()); err != nil {
 		fmt.Println(err)
 	}
 }
 ```
 
-Returned Router instance configured with a default router so you can add handlers just like you would in a Go application.
+## Server options
 
-### Built in middleware
-
-The server has some built-in middleware that you can use to add some extra functionality to your server.
-
-- Logging
-- Panic recovering
-- RequestID
-- ValueSetter **
-
-## Router options
-The router returned by the `server.New` function can receive some options that you can use to configure the server.
+The `server.New` function receives some options that you can use to configure the server.
 
 ```go
-// Initializing the server with some options
-s := server.New(
-	server.WithHost("localhost"),    // Set the host of the server
-	server.WithPort("8080"),         // Set the port of the server
+r := server.New(
+	server.WithHost("localhost"), // Set the host of the server
+	server.WithPort("8080"),      // Set the port of the server
 )
 ```
+
+This function returns a `server.Router` implementation so you can map your routes just like you would in a Go application.
 
 ### WithHost
 WithHost allows to configure the host of the server. By default its `0.0.0.0`.
@@ -75,80 +69,59 @@ WithAssets allows to set assets into the server. [Read more](/core/assets.html).
 ### WithErrorMessage
 WithErrorMessage allows you to set your custom 404 or 500 messages. [Read more](/core/errors.html).
 
-## Middleware
-The Router returned by the `server.New` function has a `Use` method that allows you to add middleware to the server.
+## Router Methods
+
+The `server.Router` implementation has the following methods:
+
+### Middleware (Use)
+
+This method allows you to specify a middleware to the router.
 
 ```go
-// headerMW is a middleware that adds a header to the response
-func headerMW(next http.Handler) http.Handler {
+r.Use(func(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("X-Hello", "World")
 
 		next.ServeHTTP(w, r)
 	})
-}
-
-// ...
-	s.Use(headerMW)
-	s.HandleFunc("/hello", helloHandler)
-
-	fmt.Println("Server started at", s.Addr())
-// ...
+})
 ```
 
-## Grouping Routes
-The Router returned by the `server.New` function has a `Group` method that allows you to group routes together, this is useful to have a better organization of your routes.
+#### Built-in middlewares
+
+The `server.Router` has some built-in middlewares that adds some extra functionality to your server.
+
+- Logging
+- Panic recovering
+- RequestID
+- ValueSetter **
+
+### HandleFunc
+
+This method allows you to register a new handler function for a specific pattern.
 
 ```go
-package main
-
-import (
-	"net/http"
-
-	"github.com/leapkit/leapkit/server"
-)
-
-func main() {
-	s := server.New()
-
-	// The API group of routes
-	s.Group("/api", func(r *server.Router) {
-		r.HandleFunc("GET /hello", helloHandler)
-		r.HandleFunc("POST /hello", createHelloHandler)
-		r.HandleFunc("DELETE /hello", deleteHelloHandler)
-	})
-
-	fmt.Println("Server started at", s.Addr())
-	if err := http.ListenAndServe(s.Addr(), s.Handler()); err != nil {
-		fmt.Println(err)
-	}
-}
+r.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
+	// ...
+})
 ```
 
-## Folder Serving
+### Grouping Routes
 
-The Router returned by the `server.New` function has a `ServeFiles` method that allows you to serve files from a folder or any other io.FS.
+The `Group` method that allows you to group routes together, this is useful to have a better organization of your routes.
 
 ```go
-package main
+r.Group("/api/", func(rg *server.Router) {
+	rg.HandleFunc("GET /hello/{$}", helloHandler)          // GET    /api/hello
+	rg.HandleFunc("POST /hello/{$}", createHelloHandler)   // POST   /api/hello
+	rg.HandleFunc("DELETE /hello/{$}", deleteHelloHandler) // DELETE /api/hello
+})
+```
 
-import (
-	"net/http"
+### Folder (assets)
 
-	"github.com/leapkit/leapkit/server"
-)
+The `Folder` method that allows you to serve files from a folder or any other io.FS.
 
-func main() {
-	s := server.New()
-
-	// ... Other routes
-
-	// Serve files from the public folder
-	s.ServeFiles("/public", http.Dir("public"))
-
-	fmt.Println("Server started at", s.Addr())
-	if err := http.ListenAndServe(s.Addr(), s.Handler()); err != nil {
-		fmt.Println(err)
-	}
-}
+```go
+r.Folder("/files/", templates.FS)
 ```

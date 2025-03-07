@@ -1,4 +1,4 @@
 ---
 index: 2
-title: "CLI"
+title: "Tools"
 ---

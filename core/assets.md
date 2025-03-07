@@ -11,26 +11,46 @@ This handler is capable of a few things that are useful for web development:
 
 ## Usage
 
-To set our assets into our Leapkit app, we need to use the `WithAssets` server option. It receives an FS parameter that will help locate template files to be served.
+To set your assets in the app, you need to use the `server.WithAssets` server option. It receives an `embed.FS` parameter that will help locate template files to be served.
+
 
 ```go
-
 //go:embed templates/**/*.html
 var templatesFS embed.FS
 
-s := server.New(
-	server.WithAssets(templatesFS),
+r := server.New(
+	server.WithAssets(templatesFS, "/files"),
 )
 ```
 
 ## Fingerprinting Helper
-The `server.WithAssets` option also setus the `assetsPath` helper that can be used in your templates to use the fingerprinted version of an asset.
+
+The `server.WithAssets` option also sets up the `assetPath` helper within the request `context`, which can be utilized in your templates to access the fingerprinted version of an asset.
 
 ```html
-<link rel="stylesheet" href="<%= assetPath(`/css/app.css`) %>">
+<link rel="stylesheet" href="<%= assetPath(`css/app.css`) %>">
 // will output something like
-<link rel="stylesheet" href="/css/app-cafe123ff22112eedd.css">
+<link rel="stylesheet" href="/files/css/app-cafe123ff22112eedd.css">
 ```
 
-## Hotcode Reloading
-The assets managers provides a handler function capable of serving the files in the assets filesystem. This handler considers the `GO_ENV` variable to look in for files in disk before looking into the embedded filesystem passed.
+### Alternative setup
+
+Depending on your project configuration, you can also set the asset manager manually and use its fingerprint function
+
+```go
+var (
+	//go:embed *
+	files embed.FS
+
+	// assets manager
+	manager = assets.NewManager(files, "/files")
+)
+
+func AssetPath(name string) (string, error) {
+	return manager.PathFor(name)
+}
+
+// ...
+r := server.New()
+r.Folder(manager.HandlerPattern(), manager)
+```
