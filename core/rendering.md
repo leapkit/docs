@@ -17,13 +17,12 @@ Philosophy of the render engine is that it lives in the application context and 
 This is the way that the `render` package provides to initialize the render engine in the context of your application, this function receives the file system (`fs.FS`) which is pointing to your HTML files dir. This function returns a middleware that must be used by the router.
 
 ```go
-import "github.com/leapkit/leapkit/core/render"
+import "go.leapkit.dev/leapkit/core/render"
 
 var (
-
-    // Alternatively...
-    // renderMW = render.InCtx(templates.FS)
     renderMW = render.Middleware(templates.FS)
+    // or
+    // renderMW = render.InCtx(templates.FS)
 )
 // ...
 func appRoutes() {
@@ -43,16 +42,16 @@ The `Middleware` function allows some options that you can set when this is bein
 This option allows you to set the base template on which all HTML files will be built.
 
 ```text
-├── your/path/to/templates/
-│	├── default
-│	│   └── application.html
+├── project/
+│	├── custom_path
+│	│   └── layout.html
 │	└── templates.go  // FS
 ```
 
 ```go
 // renderMW = render.InCtx(...
 renderMW = render.Middleware(templates.FS,
-    render.WithDefaultLayout("default/application.html"),
+    render.WithDefaultLayout("custom_path/layout.html"),
 )
 ```
 

@@ -3,38 +3,70 @@ title: Getting Started
 index: 2
 ---
 
-The only requirement to get started with Leapkit is to have Go installed on your machine. You can download Go from [here](https://golang.org/dl/). Make sure you install the latest version of Go.
-Once you have installed Go, you can proceed to generate your first projects
+The only requirement to start using Leapkit is to have installed **Go 1.24 or higher** on your machine. You can download Go from [here](https://golang.org/dl/). Ensure that you install the latest version of Go.
+
+Once you have installed Go, you can proceed to generate your first project:
 
 ```sh
-go run go.leapkit.com/tools/new@latest [project_name]
+go run rsc.io/tmp/gonew@latest go.leapkit.dev/template@latest [name]
 ```
 
-Once the project is generated go into the project folder and download the dependencies with:
+This command will create a new directory with the name of your app into the current path.
+
+## Folder structure
+
+The Leapkit directory will contain the following structure:r
+
+```text
+├── bin/
+├── cmd/
+│    ├── app/
+│    │    └── main.go
+│    ├── migrate/
+│    │    └── migrate.go
+├── internal/
+│    ├── home/
+│    │    ├── index.go
+│    │    └── index.html
+│    ├── migrations/
+│    │    ├── 0_migrations.sql
+│    │    ├── 20241113163842_add_pragmas.sql
+│    │    └── migrations.go
+│    ├── system/
+│    │    ├── assets/
+│    │    │    ├── application.js
+│    │    │    ├── assets.go
+│    │    │    └── tailwind.css
+│    │    └── layout.html
+│    └── app.go
+├── .dockerignore
+├── .env
+├── .gitignore
+├── database.db
+├── Dockerfile
+├── go.mod
+├── go.sum
+├── leapkit.db
+├── Procfile
+├── README.md
+└── tailwind.config.js
+```
+
+
+
+
+Navigate into the project folder and download the project dependencies:
 
 ```sh
 go mod download
 ```
-This will install the necessary dependencies.
 
-### Starting the application
-Running the application will depend on the version of Go you have intalled for Go 1.23 you can run:
+### Starting the Application
 
-```sh
-go run go.leapkit.com/tools/dev@latest
-```
-
-If you're using Go 1.24 set that as a tool in your `go.mod` file. First download the tool (only once).
-
-```sh
-go get -tool go.leapkit.com/tools/dev
-```
-
-Then every time you want to run the application you can use the `go tool` shortcut to invoke the dev tool.
+To run the application, you can use the `go tool dev` command. [Read more](/tools/serve.html).
 
 ```sh
 go tool dev
 ```
 
-The dev tool reads the Procfile in the root of the folder and start the processes defined in it.
-Once the application is running it should be [accessible locally](http://localhost:3000).
+Once the application runs, it should be accessible locally at [https://localhost:3000](https://localhost:3000).

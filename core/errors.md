@@ -3,7 +3,7 @@ index: 6
 title: "Errors"
 ---
 
-Leapkit provides a way to customize the response message for specific HTTP error statuses like `404 not found` or `500 Internal Server Error`.
+Leapkit provides a way to customize the response message for specific HTTP error statuses like `404 Not Found` or `500 Internal Server Error`.
 
 ## Usage
 
@@ -44,7 +44,7 @@ func notFoundPage() string {
             <title>404 Not Found</title>
         </head>
         <body>
-            <h1>Oops! We couldn't find the page you were looking for</h1
+            <h1>Oops! We couldn't find the page you were looking for</h1>
         </body>
     </html>`
 }

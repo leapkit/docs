@@ -10,7 +10,7 @@ There are two main components of LeapKit:
 - [The LeapKit Tools](https://github.com/leapkit/tools)
 
 ## LeapKit Core
-The LeapKit Core module contains the Go libraries with common web features. Things such as form binding, form validating, database migrations, and routing helpers, and hot code reloading live in this package.
+The Leapkit Core module is a collection of packages that provide a set of essential tools for building web applications in Go.
 
 ## LeapKit Tools
-The tools are a set of CLI binaries that help you develop your LeapKit based applications. Migrations, Generators and project initialization are good examples of what the tools can do.
+The Leapkit tools are a set of CLI binaries that help you develop your LeapKit based applications. Project initialization, database management and live code reloading are included in the tools.

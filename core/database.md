@@ -18,7 +18,7 @@ Let's explore each tool in detail.
 The `db` package offers two essential functions: `Create()` and `Drop()`. These functions enable you to set up and manage your database for your project. Simply provide the database URL as a parameter to create it. These functions internally identify, based on the URL structure, which *database engine* will be used to process the action.
 
 ```go
-import "github.com/leapkit/leapkit/core/db"
+import "go.leapkit.dev/core/db"
 
 var databaseURL = "postgres://user:password@host:port/db_name"
 
@@ -63,7 +63,7 @@ databaseURL = "/path/to/your/sqlite3.db"
 DB = db.ConnectionFn(databaseURL, db.WithDriver("sqlite3"))
 ```
 
-### Drivers
+### Setting up drivers
 
 So that the `db` package can connect to your database, ensure that you import the specific driver package for the database engine you want to use.
 
@@ -78,7 +78,7 @@ So that the `db` package can connect to your database, ensure that you import th
 package main
 
 import (
-    "github.com/leapkit/leapkit/core/db"
+    "go.leapkit.dev/core/db"
     _ "github.com/lib/pq" // importing the PostgreSQL driver.
 )
 
@@ -103,7 +103,7 @@ func myAwesomeFunc() {
 package main
 
 import (
-    "github.com/leapkit/leapkit/core/db"
+    "go.leapkit.dev/core/db"
     _ "github.com/mattn/go-sqlite3" // importing the SQLite3 driver.
 )
 
@@ -128,67 +128,31 @@ Within the `db` package, Leapkit offers tools for database migration operations.
 
 ### Creating migrations
 
-To create a migration, the `db` package provides you with the `GenerateMigration()` function, which creates a file with a name with the convention `YYYYMMDDHHmmss_migration_name.sql`, for instance `20260626100405_my_awesome_migration.sql`.
+To create a new migration you will need to use our `db` tool, [Read more](#).
 
-By default, migrations are created on the `./internal/app/database/migrations` path. However, you can set a custom migration path by applying the `UseMigrationFolder()` option.
+
+### Running Migrations
+
+To run your database migrations, this package provides two functions: `RunMigrationsDir` and `RunMigrations`.
+
+#### `RunMigrationsDir`
 
 ```go
-import (
-    "github.com/leapkit/leapkit/core/db"
-	"github.com/leapkit/leapkit/core/db/migrations"
-)
-
-// ...
-err := db.GenerateMigration("adding_new_column_to_my_awesome_table",
-    migrations.UseMigrationFolder("/my/awesome/migration/path"),
-)
-
+err := db.RunMigrationsDir(migrationsPath string, db *sql.DB)
 if err != nil {
     // handle the error
 }
 ```
 
-### Running migrations
+This function receives the path to the directory where migration files are stored and the `*sql.DB` connection.
 
-To run your database migrations, you can make use of `RunMigrations` function, which receives an `embed.FS` file to locate your migrations files, and the `*sqlx.DB` connection.
-
-```go
-// /my/awesome/migration/path/migrations.go
-package migrations
-
-import "embed"
-
-//go:embed *.sql */*.sql
-var FS embed.FS
-```
-
+#### `RunMigrations`
 
 ```go
-package main
-
-import (
-    "github.com/leapkit/leapkit/core/db"
-    "github.com/leapkit/leapkit/core/db/migrations"
-    _ "github.com/lib/pq"
-
-    "/my/awesome/migration/path"
-)
-
-var (
-    databaseURL = "postgres://user:password@host:port/db_name"
-
-    DB = db.ConnectionFn(databaseURL)
-)
-
-func applyDatabaseMigrations() {
-    conn, err := DB()
-    if err != nil {
-        // handle the error
-    }
-
-    if err := db.RunMigrations(migrations.FS, conn); err != nil {
-        // handle the error
-    }
-    // ...
+err := db.RunMigrations(migrationsFS embed.FS, db *sql.DB)
+if err != nil {
+    // handle the error
 }
 ```
+
+This function received the `embed.FS` instance that contains the migration files and the `*sql.DB` connection.

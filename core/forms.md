@@ -84,7 +84,7 @@ Alternatively, you can create your own validation functions. As long as these fo
 
 ```go
 // IsUnique checks in the database for a user email to be unique.
-func UniqueEmail(db *sqlx.DB ) func([]string) error {
+func UniqueEmail(db *sqlx.DB) func([]string) error {
 	return func(emails []string) error {
     query := "SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)"
 		stmt, err := db.Prepare(query)
