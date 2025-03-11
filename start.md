@@ -55,6 +55,7 @@ Navigate into the project folder and download the project dependencies:
 
 ```sh
 go mod download
+go tool tailo download
 ```
 
 ### Starting the Application
