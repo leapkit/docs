@@ -54,9 +54,9 @@ The Leapkit directory will contain the following structure:
 Navigate into the project folder and download the project dependencies:
 
 ```sh
-go mod download
-go tool tailo download
+go mod download && go tool tailo download
 ```
+_The `go tool tailo download` command is required to fetch the Tailwind CSS binary._
 
 ### Starting the Application
 
