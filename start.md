@@ -15,7 +15,7 @@ This command will create a new directory with the name of your app into the curr
 
 ## Folder structure
 
-The Leapkit directory will contain the following structure:r
+The Leapkit directory will contain the following structure:
 
 ```text
 ├── bin/
@@ -46,20 +46,17 @@ The Leapkit directory will contain the following structure:r
 ├── Dockerfile
 ├── go.mod
 ├── go.sum
-├── leapkit.db
 ├── Procfile
 ├── README.md
 └── tailwind.config.js
 ```
 
-
-
-
 Navigate into the project folder and download the project dependencies:
 
 ```sh
-go mod download
+go mod download && go tool tailo download
 ```
+_The `go tool tailo download` command is required to fetch the Tailwind CSS binary._
 
 ### Starting the Application
 
