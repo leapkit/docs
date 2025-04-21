@@ -2,7 +2,12 @@
 title: Forms
 index: 3
 ---
-Leapkit ships with a form package that provides a flexible and reusable way to validate form data by defining a set of validation rules that can be applied to form fields.
+Leapkit ships with a form package that provides a flexible and reusable way to decode and validate form data by defining a set of validation rules that can be applied to form fields.
+
+## Decoding form
+
+```
+
 
 ## Validations
 The `form/validate` package that offers a flexible and reusable way to validate form data by defining a set of validation rules that can be applied to form fields. Validations are a set of rules stablished for different fields passed in the request.
