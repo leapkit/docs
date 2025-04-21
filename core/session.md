@@ -30,8 +30,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
     // getting a session value
     myVal := ss.Values["sessionVal"].(string)
 
-
-    // setting a flash message
+    // adding a flash message
     ss.AddFlash("welcome!")
     ss.AddFlash("peter", "username_flash")
     // {
@@ -47,3 +46,32 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 ```
 
 You can omit the `session.Save()` method **only** if you use `http.ResponseWriter` methods because the response writer is replaced by a Leapkit session implementation, which saves the current session. Otherwise, you have to use it.
+
+## Registering custom session types
+
+To register custom session types, you can use the `session.RegisterSessionTypes()` function. This function takes a variable number of session types as arguments and registers them with the session manager.
+
+```go
+type User struct {
+	Name string
+	Age int
+	Address Address
+}
+
+type Address struct {
+	City, Country string
+}
+
+session.RegisterSessionTypes(User{}, Address{})
+
+ss.Values["user"] = User{
+		Name: "John Smith",
+		Age:  30,
+		Address: Address{
+			City:    "New York",
+			Country: "USA",
+		},
+	}
+
+user := ss.Values["user"].(User)
+```
