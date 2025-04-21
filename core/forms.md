@@ -6,11 +6,24 @@ Leapkit ships with a form package that provides a flexible and reusable way to d
 
 ## Decoding form
 
+This package provides the `form.Decode` function that decodes a request form into a struct. It receives the `req` variable (*http.Request) and a pointer to the struct that will be populated with the form data. Returns an error if the form data is invalid.
+
+``` go
+
+type User struct {
+	Email    string `form:"email"`
+	Password string `form:"password"`
+}
+
+var user User
+if err := form.Decode(req, &user); err != nil {
+	// handle error
+}
+
 ```
 
-
 ## Validations
-The `form/validate` package that offers a flexible and reusable way to validate form data by defining a set of validation rules that can be applied to form fields. Validations are a set of rules stablished for different fields passed in the request.
+The `form/validate` package also offers a way to validate form data by defining a set of validation rules that can be applied to form fields. Validations are a set of established rules for different fields passed in the request.
 
 You can define these Validations to be used in your http handlers by and call the `form.Validate` function passing the `req` variable (*http.Request) and handling the `validate.Errors` returned. For example:
 
