@@ -3,7 +3,9 @@ index: 8
 title: "Session"
 ---
 
-Leapkit provides a way to set a session in your app to persist values needed throughout the app. Leapkit uses the [gorilla/sessions](https://github.com/gorilla/sessions) package for this.
+Leapkit provides a way to set a session in your app to persist values needed throughout the app by using the [gorilla/sessions](https://github.com/gorilla/sessions) package.
+
+> **Note:** Leapkit only uses session-based cookies to manage session state. These cookies are temporary and are automatically deleted when the are expired. Any other type of cookies is not used, such as persistent or third-party cookies.
 
 ## Setup
 
@@ -18,7 +20,6 @@ s := server.New(
 ## Handling session values and flashes
 
 To use the session struct within your handler, retrieve it from the context using the `session.FromCtx()` function. Then, you can manage your session values according to the `gorilla/session` package [docs](https://pkg.go.dev/github.com/gorilla/sessions). For instance:
-
 
 ```go
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +51,8 @@ You can omit the `session.Save()` method **only** if you use `http.ResponseWrite
 ## Registering custom session types
 
 To register custom session types, you can use the `session.RegisterSessionTypes()` function. This function takes a variable number of session types as arguments and registers them with the session manager.
+
+> **WARNING:** The [RFC 6265](https://www.rfc-editor.org/rfc/rfc6265.html#section-6) advises keeping cookie sizes as small as possible to minimize network bandwidth. So please, ensure your cookie only holds essential data.
 
 ```go
 type User struct {
