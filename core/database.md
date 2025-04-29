@@ -35,7 +35,7 @@ if err := db.Drop(databaseURL); err != nil {
 
 ## Connection
 
-To establish a connection with your database in your app, use the `ConnectionFn` function, which returns the `*sqlx.DB` and an `error` if the connection cannot be established.
+To establish a connection with your database in your app, use the `ConnectionFn` function, which returns the `*sql.DB` and an `error` if the connection cannot be established.
 
 ```go
 var (
