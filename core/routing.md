@@ -91,10 +91,36 @@ r.Use(func(next http.Handler) http.Handler {
 
 The `server.Router` has some built-in middlewares that adds some extra functionality to your server.
 
-- Logging
-- Panic recovering
-- RequestID
-- ValueSetter **
+- **Logging**: This middleware tracks the result of all requests.
+- **Panic recovering**: Prevents the all panics from any unexpected error.
+- **RequestID:** Sets the request ID into the request context.
+
+#### The Valuer
+
+The `valuer` is a map set in the request context that stores values for use by other components, such as the render engine. By default, this valuer stores the following information:
+
+- `request`: Is the current *http.Request
+- `currentURL`: holds the current URL from the request
+
+To add values to the valuer, retrieve it from the context and assert it to an interface that has a `Set(string, any)` method:
+
+```go
+func(w http.ResponseWriter, r *http.Request) {
+	if vlr, ok := r.Context().Value("valuer").(interface{ Set(string, any) }); ok {
+		vlr.Set("api-key", "abc123")
+	}
+}
+```
+
+To read values from the valuer, assert it to an interface that has a `Value(string) any` method:
+
+```go
+func(w http.ResponseWriter, r *http.Request) {
+	if vlr, ok := r.Context().Value("valuer").(interface{ Value(string) any }); ok {
+		x := vlr.Value("api-key") // abc123
+	}
+}
+```
 
 ### HandleFunc
 
