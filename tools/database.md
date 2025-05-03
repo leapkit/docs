@@ -1,5 +1,5 @@
 ---
-index: 3
+index: 2
 title: "Database management"
 ---
 
