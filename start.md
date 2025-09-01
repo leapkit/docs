@@ -47,8 +47,7 @@ The Leapkit directory will contain the following structure:
 ├── go.mod
 ├── go.sum
 ├── Procfile
-├── README.md
-└── tailwind.config.js
+└── README.md
 ```
 
 Navigate into the project folder and download the project dependencies:
